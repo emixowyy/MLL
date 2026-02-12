@@ -28,8 +28,10 @@ else {
 }
 
 if (!$user || !password_verify($password, $user[0]['pass_hash'])) {
-    echo json_encode(["success" => false, "message" => "Nie udało się zalogować"]);
+    echo json_encode(["success" => false, "message" => "Hasło lub nazwa użytkownika są niepoprawne"]);
     exit;
 }
 
-echo json_encode(["success" => true, "message" => "Zalogowano pomyślnie"]);
+$deluser = $pdo->prepare("DELETE  FROM users WHERE email = ? OR username = ?");
+$deluser -> execute([$email ?? '', $username ?? '']);
+echo json_encode(["success" => true, "message" => "Konto usunięto pomyślnie"]);
