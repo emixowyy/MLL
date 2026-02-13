@@ -13,6 +13,6 @@ try {
     );
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
-    echo json_encode(['Error' => 'Błąd połączenia z bazą']);
+    echo json_encode(['Error' => 'Error connecting to the database']);
     exit;
 }
