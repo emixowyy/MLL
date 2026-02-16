@@ -2,6 +2,8 @@
 
 header('Content-Type: application/json');
 require 'db.php';
+require_once 'token_verification.php';
+authentication();
 //Data consists of: 'username' or 'email', 'password', 'param' and 'new_password' or 'new_email' or 'new_username'
 $data = json_decode(file_get_contents("php://input"), true);
 
