@@ -7,7 +7,7 @@ try {
     authentication();
     //data consists of:  and 'bid' and 'status' and/or 'rating' and/or 'review' and/or 'reviewpub' and/or 'startdate' and/or 'enddate' and/or 'pagesread'
     $data = json_decode(file_get_contents("php://input"), true);
-    if (!$uid || !isset($data['bid'], $data['status'])) {
+    if (!$uid || !isset($data['bid'])) {
         echo json_encode (['success' => false, 'message' => 'Not enough data']);
         exit;
     }
@@ -21,15 +21,13 @@ try {
     $pagesread = $data['pagesread'] ?? 0;
 
 
-    $bookcheck = $pdo->prepare("SELECT bid FROM user_books WHERE uid = ? AND bid = ?");
-    $bookcheck->execute([$uid, $bid]);
-    if ($bookcheck->fetch()) {
-        echo json_encode(['success' => false, 'message' => 'Book already in your library']);
+    $bookin = $pdo->prepare("UPDATE user_books SET status=?, rating=?, review=?, review_pub=?, start_date=?, end_date=?, pages_read=? WHERE uid=? AND bid=?");
+    $bookin -> execute([$status, $rating, $review, $reviewpub, $startdate, $enddate, $pagesread, $uid, $bid]);
+    if ($bookin->rowCount()===0) {
+        echo json_encode(['success' => false, 'message' => 'Nothing was updated']);
         exit;
     }
-    $bookin = $pdo->prepare("INSERT INTO user_books (status,rating,review,review_pub,start_date,end_date,pages_read, uid, bid) VALUES (?,?,?,?,?,?,?,?,?)");
-    $bookin -> execute([$status, $rating, $review, $reviewpub, $startdate, $enddate, $pagesread, $uid, $bid]);
-    echo json_encode(['success' => true, 'message' => 'Book inserted into user library']);
+    echo json_encode(['success' => true, 'message' => 'Entry updated in user library']);
 
 }
 catch (EXCEPTION $e) {

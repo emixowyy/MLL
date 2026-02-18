@@ -3,7 +3,7 @@
 $host = 'sql2.7m.pl';
 $dbname = 'mllemixowyy_mylittlelibrary';
 $user = 'mllemixowyy_mylittlelibrary';
-$pass = 'Lubiemiesoja2';
+$pass = '';
 
 try {
     $pdo = new PDO(
@@ -12,7 +12,8 @@ try {
         $pass
     );
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    echo json_encode(['Error' => 'Error connecting to the database']);
+}
+catch (EXCEPTION $e) {
+    echo json_encode(['success' => false, 'message' => 'Error, try again LATER (later is not 5 seconds from now btw)']);
     exit;
 }
